@@ -96,5 +96,28 @@ class Human{
      }
 }
 
-var alien = new Alien("laser")
-var human = new Human("laser")
+class Game{
+    constructor(...params){
+        this.players = [...params]
+        this.copyPlayers = [...params]
+    }
+
+    start(){
+        let attacker=this.attacker_selection()
+        console.log(attacker)
+    }
+
+    attacker_selection(){
+        let index= Math.floor(Math.random() * this.players.length)
+        let player = this.players[String(index)]
+        return player
+    }
+
+
+}
+
+alien1=new Alien()
+alien2=new Alien()
+human=new Human()
+game = new Game(alien1, alien2, human)
+game.start()
