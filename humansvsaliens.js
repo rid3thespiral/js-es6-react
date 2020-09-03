@@ -20,6 +20,7 @@ class Alien{
             this.weapons = new Weapon("pistol")
         this.health = 80
         this.name = "Alien"+this.makeid(2)
+        this.alive = true
     }
     getWeapons(){
         return this.weapons
@@ -34,13 +35,13 @@ class Alien{
         this.weapons.push(...weapon)
     }
     attack(enemy){
-        let damage = this.weapons[0].damage
+        let damage = this.weapons.damage
         let delta=enemy.getHealth()-damage
         enemy.setHealth(delta)
-        console.log(enemy.name+" health is "+enemy.getHealth())
-        if(enemy.getHealth() < 0){
+        console.log(enemy.name+" health is "+enemy.getHealth()+ " attacked by "+this.name)
+        if(enemy.getHealth() <= 0){
             console.log(enemy.name+" is dead")
-            enemy = null
+            this.alive = false
         }
     }
     makeid(length) {
@@ -62,6 +63,7 @@ class Human{
             this.weapons = new Weapon("pistol")
         this.health=50
         this.name="Human"+this.makeid(2)
+        this.alive = true
     }
     getWeapons(){
         return this.weapons
@@ -76,13 +78,13 @@ class Human{
         this.weapons.push(...weapon)
     }
     attack(enemy){
-        let damage = this.weapons[0].damage
+        let damage = this.weapons.damage
         let delta=enemy.getHealth()-damage
         enemy.setHealth(delta)
-        console.log(enemy.name+" health is "+enemy.getHealth())
-        if(enemy.getHealth() == 0){
-            console.log(enemy+" is dead")
-            enemy = null
+        console.log(enemy.name+" health is "+enemy.getHealth()+" attacked by "+this.name)
+        if(enemy.getHealth() <= 0){
+            console.log(enemy.name+" is dead")
+            this.alive = false
         }
     }
     makeid(length) {
@@ -99,21 +101,35 @@ class Human{
 class Game{
     constructor(...params){
         this.players = [...params]
-        this.copyPlayers = [...params]
+    }
+
+    random_index(){
+        let index= Math.floor(Math.random() * this.players.length)
+        return index
     }
 
     start(){
+        for(let i=0; i < 8;i++){
         let attacker=this.attacker_selection()
-        console.log(attacker)
+        let enemy=this.enemy_selection(attacker)
+        attacker.attack(enemy)
+        }
     }
 
     attacker_selection(){
-        let index= Math.floor(Math.random() * this.players.length)
+        let index = this.random_index()
         let player = this.players[String(index)]
-        return player
+        if(player.alive == true)
+            this.players.splice(index,1)
+            return player
     }
 
-
+    enemy_selection(attacker){
+        let index = this.random_index()
+        let enemy = this.players[String(index)]
+        this.players.push(attacker)
+        return enemy
+    }
 }
 
 alien1=new Alien()
