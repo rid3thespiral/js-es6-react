@@ -17,3 +17,5 @@ fetch(url + 1).then( result => {
     }
 }).then(json => console.log(json))
 .catch(error => console.log(error))
+
+
